@@ -127,6 +127,4 @@ C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\obj\Debug\net8.0\refint\LibraryApi.
 C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\obj\Debug\net8.0\LibraryApi.pdb
 C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\obj\Debug\net8.0\LibraryApi.genruntimeconfig.cache
 C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\obj\Debug\net8.0\ref\LibraryApi.dll
-C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\bin\Debug\net8.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\niewi\Desktop\RestfulAPI\LibraryApi\bin\Debug\net8.0\LibraryApi.staticwebassets.runtime.json

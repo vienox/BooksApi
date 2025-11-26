@@ -51,7 +51,7 @@ public class BookCopiesController : ControllerBase
 
         var book = await _context.Books.FindAsync(dto.BookId);
         if (book is null)
-            return NotFound($"Book {dto.BookId} not found.");
+            return BadRequest($"Book {dto.BookId} not found.");
 
         var copy = new BookCopy
         {
@@ -83,7 +83,7 @@ public class BookCopiesController : ControllerBase
 
         var bookExists = await _context.Books.AnyAsync(b => b.Id == dto.BookId);
         if (!bookExists)
-            return NotFound($"Book {dto.BookId} not found.");
+            return BadRequest($"Book {dto.BookId} not found.");
 
         copy.InventoryNumber = dto.InventoryNumber;
         copy.Condition = dto.Condition;
@@ -92,7 +92,7 @@ public class BookCopiesController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return Ok(MapCopyDto(copy));
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
@@ -109,10 +109,16 @@ public class BookCopiesController : ControllerBase
     }
 
     private static BookCopyDto MapCopyDto(BookCopy copy) =>
-        new(
-            copy.Id,
-            copy.InventoryNumber,
-            copy.Condition,
-            copy.IsAvailable,
-            new BookSummaryDto(copy.BookId, copy.Book.Title));
+        new BookCopyDto
+        {
+            Id = copy.Id,
+            InventoryNumber = copy.InventoryNumber,
+            Condition = copy.Condition,
+            IsAvailable = copy.IsAvailable,
+            Book = new BookSummaryDto
+            {
+                Id = copy.BookId,
+                Title = copy.Book.Title
+            }
+        };
 }

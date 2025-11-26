@@ -81,7 +81,7 @@ public class AuthorsController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return Ok(MapAuthorDto(author));
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
@@ -98,11 +98,17 @@ public class AuthorsController : ControllerBase
     }
 
     private static AuthorDto MapAuthorDto(Author author) =>
-        new(
-            author.Id,
-            author.FirstName,
-            author.LastName,
-            author.DateOfBirth,
-            author.Biography,
-            author.Books.Select(b => new BookSummaryDto(b.Id, b.Title)).ToList());
+        new AuthorDto
+        {
+            Id = author.Id,
+            FirstName = author.FirstName,
+            LastName = author.LastName,
+            DateOfBirth = author.DateOfBirth,
+            Biography = author.Biography,
+            Books = author.Books.Select(b => new BookSummaryDto
+            {
+                Id = b.Id,
+                Title = b.Title
+            }).ToList()
+        };
 }

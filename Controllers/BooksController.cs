@@ -59,7 +59,7 @@ public class BooksController : ControllerBase
 
         var authorExists = await _context.Authors.AnyAsync(a => a.Id == dto.AuthorId);
         if (!authorExists)
-            return NotFound($"Author {dto.AuthorId} not found.");
+            return BadRequest($"Author {dto.AuthorId} not found.");
 
         var book = new Book
         {
@@ -94,7 +94,7 @@ public class BooksController : ControllerBase
 
         var authorExists = await _context.Authors.AnyAsync(a => a.Id == dto.AuthorId);
         if (!authorExists)
-            return NotFound($"Author {dto.AuthorId} not found.");
+            return BadRequest($"Author {dto.AuthorId} not found.");
 
         book.Title = dto.Title;
         book.Description = dto.Description;
@@ -104,7 +104,7 @@ public class BooksController : ControllerBase
 
         await _context.SaveChangesAsync();
 
-        return Ok(MapBookDto(book));
+        return NoContent();
     }
 
     [HttpDelete("{id:int}")]
@@ -121,19 +121,30 @@ public class BooksController : ControllerBase
     }
 
     private static BookDto MapBookDto(Book book) =>
-        new(
-            book.Id,
-            book.Title,
-            book.Description,
-            book.PublishedYear,
-            book.Isbn,
-            new AuthorSimpleDto(book.AuthorId, book.Author.FirstName, book.Author.LastName),
-            book.Copies.Select(c =>
-                new BookCopyDto(
-                    c.Id,
-                    c.InventoryNumber,
-                    c.Condition,
-                    c.IsAvailable,
-                    new BookSummaryDto(book.Id, book.Title)
-                )).ToList());
+        new BookDto
+        {
+            Id = book.Id,
+            Title = book.Title,
+            Description = book.Description,
+            PublishedYear = book.PublishedYear,
+            Isbn = book.Isbn,
+            Author = new AuthorSimpleDto
+            {
+                Id = book.AuthorId,
+                FirstName = book.Author.FirstName,
+                LastName = book.Author.LastName
+            },
+            Copies = book.Copies.Select(c => new BookCopyDto
+            {
+                Id = c.Id,
+                InventoryNumber = c.InventoryNumber,
+                Condition = c.Condition,
+                IsAvailable = c.IsAvailable,
+                Book = new BookSummaryDto
+                {
+                    Id = book.Id,
+                    Title = book.Title
+                }
+            }).ToList()
+        };
 }
